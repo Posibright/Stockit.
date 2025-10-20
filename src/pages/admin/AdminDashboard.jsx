@@ -5,13 +5,15 @@ import {
   HiOutlinePlus, 
   HiOutlineCloudArrowDown, 
   HiOutlineChartBar,
-  HiOutlineCube, // For Total Products (Shipping/Product Box)
-  HiOutlineExclamationTriangle, // For Low Stock (Alert Sign)
-  HiOutlineBanknotes, // For Total Value (Green Dollar/Money Sign)
-  HiOutlineShoppingCart // For Out of Stock (Shopping Cart)
+  HiOutlineCube, 
+  HiOutlineExclamationTriangle, 
+  HiOutlineBanknotes, 
+  HiOutlineShoppingCart
 } from 'react-icons/hi2'; 
 import AddProductModal from '../../components/AddProductModal'; 
-
+import InventoryTable from '../../components/InventoryTable'; 
+// ✅ FIX: Import name changed to singular 'AnalyticsChart'
+import AnalyticsChart from '../../components/AnalyticsChart'; 
 
 
 const MetricCard = ({ title, value, description, trend, color, Icon, iconColor }) => (
@@ -104,12 +106,45 @@ const AdminProfileDropdown = () => (
 );
 
 
+// --- Main Admin Dashboard Component ---
 
 const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentView, setCurrentView] = useState('overview'); 
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  
+  const TabButton = ({ view, label }) => (
+    <button 
+      className={`py-2 px-4 text-sm font-medium transition duration-150 
+        ${currentView === view 
+          ? 'text-indigo-600 border-b-2 border-indigo-600' 
+          : 'text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300'}`
+      }
+      onClick={() => setCurrentView(view)}
+    >
+      {label}
+    </button>
+  );
+
+  const renderContent = () => {
+    switch (currentView) {
+      case 'inventory':
+        return <InventoryTable onAddProductClick={openModal} />; 
+      case 'analytics': 
+        // ✅ FIX: Component usage changed to singular 'AnalyticsChart'
+        return <AnalyticsChart />; 
+      case 'overview':
+      default:
+        return (
+          <div className="space-y-6"> 
+            <QuickActions onAddClick={openModal} /> 
+            <RecentActivity />
+          </div>
+        );
+    }
+  };
 
   return (
     <div className="flex min-h-screen bg-gray-50">
@@ -119,12 +154,13 @@ const AdminDashboard = () => {
         
           <header className="mb-8 flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard: Overview</h1>
+              <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard: {currentView === 'overview' ? 'Overview' : currentView === 'inventory' ? 'Inventory' : 'Analytics'}</h1>
               <p className="text-sm text-gray-500">Welcome Back, Akande.</p>
             </div>
             <AdminProfileDropdown />
           </header>
 
+          {/* 1. Metric Cards (Top Row) */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <MetricCard 
               title="Total Products" 
@@ -132,52 +168,44 @@ const AdminDashboard = () => {
               description="4 in low or critical inventory"
               trend="10%"
               Icon={HiOutlineCube} 
-              iconColor="text-indigo-500" // Default icon color
+              iconColor="text-indigo-500"
             />
             <MetricCard 
               title="Low Stock Items" 
               value="4" 
               description="Time to reorder"
               color="text-yellow-600"
-              Icon={HiOutlineExclamationTriangle} // Red Alert/Exclamation Icon
-              iconColor="text-red-500" // Red icon color
+              Icon={HiOutlineExclamationTriangle}
+              iconColor="text-red-500"
             />
             <MetricCard 
               title="Total Value" 
               value="$15,506.4" 
               description="Inventory worth"
-              Icon={HiOutlineBanknotes} // Dollar/Money Icon
-              iconColor="text-green-500" // Green icon color
+              Icon={HiOutlineBanknotes}
+              iconColor="text-green-500"
             />
             <MetricCard 
               title="Out of Stock" 
               value="1" 
               description="Must restock soon"
               color="text-red-600"
-              Icon={HiOutlineShoppingCart} // Red Shopping Cart Icon
-              iconColor="text-red-500" // Red icon color
+              Icon={HiOutlineShoppingCart}
+              iconColor="text-red-500"
             />
           </div>
 
+          {/* 2. Overview / Inventory / Analytics Tabs (Now interactive) */}
           <div className="flex border-b border-gray-200 mb-8">
-            <button className="py-2 px-4 text-sm font-medium text-indigo-600 border-b-2 border-indigo-600">
-              Overview
-            </button>
-            <button className="py-2 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">
-              Inventory
-            </button>
-            <button className="py-2 px-4 text-sm font-medium text-gray-500 hover:text-gray-700 border-b-2 border-transparent hover:border-gray-300">
-              Analytics
-            </button>
+            <TabButton view="overview" label="Overview" />
+            <TabButton view="inventory" label="Inventory" />
+            <TabButton view="analytics" label="Analytics" />
+            <TabButton view="users" label="Users" /> 
           </div>
           
-          <div className="space-y-6"> 
-            
-            <QuickActions onAddClick={openModal} /> 
-            
-            <RecentActivity />
-            
-          </div>
+          {/* 3. Main Content - Renders the selected view */}
+          {renderContent()}
+          
         </div>
       </main>
       
