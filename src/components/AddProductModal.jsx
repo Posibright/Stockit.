@@ -24,9 +24,7 @@ const AddProductModal = ({ isOpen, onClose }) => {
       setRenderModal(true); 
       setTimeout(() => setModalClass('opacity-100 scale-100'), 10);
     } else {
-      // When closing, immediately start the exit transition
       setModalClass('opacity-0 scale-95'); 
-      // After the transition duration (300ms), stop rendering
       setTimeout(() => setRenderModal(false), 300);
     }
   }, [isOpen]);
@@ -49,7 +47,6 @@ const AddProductModal = ({ isOpen, onClose }) => {
     onClose(); 
   };
 
-  // The Modal Structure
   return (
     <div 
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`} 

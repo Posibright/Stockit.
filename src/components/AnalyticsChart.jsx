@@ -11,20 +11,16 @@ const categoryData = [
   { name: 'Furniture', value: 10 },
 ];
 
-// Custom colors for categories (matches the image's palette)
 const CATEGORY_COLORS = ['#3f51b5', '#ff9800', '#4caf50', '#e91e63'];
 
-// Data for the "Stock Status Distribution" pie chart
 const statusData = [
   { name: 'In Stock', value: 65 },
   { name: 'Low Stock', value: 20 },
   { name: 'Out of Stock', value: 15 },
 ];
 
-// Custom colors for stock status
 const STATUS_COLORS = ['#4caf50', '#ffc107', '#f44336'];
 
-// Data for the "Top 5 Most Valuable Items" bar chart
 const valuableItemsData = [
   { name: 'Item A', value: 6000 },
   { name: 'Item B', value: 5200 },
@@ -35,13 +31,10 @@ const valuableItemsData = [
 
 const AnalyticsChart = () => {
   return (
-    // Removed the background, shadow, and border here, replaced with a wrapper for spacing
     <div className="space-y-6"> 
       
-      {/* Top Row: Two Pie Charts Side-by-Side */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6"> 
         
-        {/* Chart 1: Products by Category - NOW A SEPARATE CARD */}
         <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
           <h4 className="text-lg font-semibold text-gray-800 mb-4">Products by Category</h4>
           <p className="text-sm text-gray-500 mb-4">Distribution of all inventory items</p>
@@ -67,7 +60,6 @@ const AnalyticsChart = () => {
           </ResponsiveContainer>
         </div>
 
-        {/* Chart 2: Stock Status Distribution - NOW A SEPARATE CARD */}
         <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
           <h4 className="text-lg font-semibold text-gray-800 mb-4">Stock Status Distribution</h4>
           <p className="text-sm text-gray-500 mb-4">Current inventory health</p>
@@ -95,7 +87,6 @@ const AnalyticsChart = () => {
         </div>
       </div>
 
-      {/* Bottom Row: Bar Chart - NOW A SEPARATE CARD */}
       <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
         <h4 className="text-lg font-semibold text-gray-800 mb-4">Top 5 Most Valuable Items</h4>
         <p className="text-sm text-gray-500 mb-4">Based on total inventory value (price × stock)</p>

@@ -12,7 +12,6 @@ import {
 } from 'react-icons/hi2'; 
 import AddProductModal from '../../components/AddProductModal'; 
 import InventoryTable from '../../components/InventoryTable'; 
-// ✅ FIX: Import name changed to singular 'AnalyticsChart'
 import AnalyticsChart from '../../components/AnalyticsChart'; 
 
 
@@ -106,8 +105,6 @@ const AdminProfileDropdown = () => (
 );
 
 
-// --- Main Admin Dashboard Component ---
-
 const AdminDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentView, setCurrentView] = useState('overview'); 
@@ -133,7 +130,6 @@ const AdminDashboard = () => {
       case 'inventory':
         return <InventoryTable onAddProductClick={openModal} />; 
       case 'analytics': 
-        // ✅ FIX: Component usage changed to singular 'AnalyticsChart'
         return <AnalyticsChart />; 
       case 'overview':
       default:
@@ -195,7 +191,6 @@ const AdminDashboard = () => {
             />
           </div>
 
-          {/* 2. Overview / Inventory / Analytics Tabs (Now interactive) */}
           <div className="flex border-b border-gray-200 mb-8">
             <TabButton view="overview" label="Overview" />
             <TabButton view="inventory" label="Inventory" />
@@ -203,7 +198,6 @@ const AdminDashboard = () => {
             <TabButton view="users" label="Users" /> 
           </div>
           
-          {/* 3. Main Content - Renders the selected view */}
           {renderContent()}
           
         </div>

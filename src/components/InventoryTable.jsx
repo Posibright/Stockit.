@@ -34,7 +34,6 @@ const InventoryTable = ({ onAddProductClick }) => {
   return (
     <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
       
-      {/* Inventory Header and Controls */}
       <div className="flex justify-between items-center mb-6">
         <div>
           <h3 className="text-xl font-bold text-gray-800">Inventory Management</h3>
@@ -49,7 +48,6 @@ const InventoryTable = ({ onAddProductClick }) => {
         </button>
       </div>
 
-      {/* Search and Filter Row */}
       <div className="flex items-center space-x-4 mb-6">
         <div className="relative flex-grow">
           <HiOutlineMagnifyingGlass className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -65,7 +63,6 @@ const InventoryTable = ({ onAddProductClick }) => {
         </button>
       </div>
       
-      {/* Product Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
