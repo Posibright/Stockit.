@@ -1,16 +1,41 @@
 // src/components/AnalyticsChart.jsx
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { PieChart, Pie, Cell, Legend, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { useSpring, animated } from '@react-spring/web';
 
-// Data for the "Products by Category" pie chart
+const useOnScreen = (options) => {
+  const ref = useRef();
+  const [isIntersecting, setIntersecting] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      // FIX: Set the state based on the current intersection status.
+      // This allows the state to become false when the element scrolls out of view.
+      setIntersecting(entry.isIntersecting); 
+    }, options);
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+    
+    return () => {
+      if (ref.current) {
+        observer.unobserve(ref.current);
+      }
+    };
+  }, [options]);
+
+  return [ref, isIntersecting];
+};
+
+
 const categoryData = [
   { name: 'Electronics', value: 50 },
   { name: 'Accessories', value: 15 },
   { name: 'Office Supplies', value: 25 },
   { name: 'Furniture', value: 10 },
 ];
-
 const CATEGORY_COLORS = ['#3f51b5', '#ff9800', '#4caf50', '#e91e63'];
 
 const statusData = [
@@ -18,7 +43,6 @@ const statusData = [
   { name: 'Low Stock', value: 20 },
   { name: 'Out of Stock', value: 15 },
 ];
-
 const STATUS_COLORS = ['#4caf50', '#ffc107', '#f44336'];
 
 const valuableItemsData = [
@@ -30,6 +54,16 @@ const valuableItemsData = [
 ];
 
 const AnalyticsChart = () => {
+  const [barChartRef, isBarChartVisible] = useOnScreen({ threshold: 0.1 }); 
+
+  const barChartSpring = useSpring({
+    // If NOT visible, opacity is 0 and it's translated down 50px.
+    // If visible, opacity is 1 and it returns to original position (0px).
+    opacity: isBarChartVisible ? 1 : 0, 
+    transform: isBarChartVisible ? 'translateY(0px)' : 'translateY(50px)',
+    config: { tension: 180, friction: 12 },
+  });
+
   return (
     <div className="space-y-6"> 
       
@@ -72,7 +106,7 @@ const AnalyticsChart = () => {
                 cx="50%"
                 cy="50%"
                 outerRadius={100}
-                innerRadius={60} // Donut chart style
+                innerRadius={60}
                 paddingAngle={5}
                 fill="#82ca9d"
               >
@@ -87,7 +121,11 @@ const AnalyticsChart = () => {
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+      <animated.div 
+        ref={barChartRef} 
+        style={barChartSpring} 
+        className="bg-white p-6 rounded-xl shadow-md border border-gray-100"
+      >
         <h4 className="text-lg font-semibold text-gray-800 mb-4">Top 5 Most Valuable Items</h4>
         <p className="text-sm text-gray-500 mb-4">Based on total inventory value (price × stock)</p>
         <ResponsiveContainer width="100%" height={300}>
@@ -101,7 +139,7 @@ const AnalyticsChart = () => {
             <Bar dataKey="value" fill="#4f46e5" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
-      </div>
+      </animated.div>
 
     </div>
   );
