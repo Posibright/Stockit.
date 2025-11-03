@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+// 🔑 1. Import useNavigate
+import { Link, useNavigate } from 'react-router-dom'; 
 import { 
     HiOutlineLockClosed, 
     HiOutlineUser, 
@@ -9,9 +10,12 @@ import {
 } from 'react-icons/hi2';
 
 const SignIn = () => {
+  // 🔑 2. Initialize the navigate hook
+  const navigate = useNavigate();
+    
   // State to manage the active role (worker or admin)
   const [role, setRole] = useState('worker');
-  
+    
   // State to manage form inputs
   const [formData, setFormData] = useState({
     email: '',
@@ -26,17 +30,33 @@ const SignIn = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    // --- Authentication Simulation and Redirection ---
+    
+    // In a real application, you would make an API call here.
+    // If the API call is successful, you would then check the user's role
+    // and execute the navigation below.
+    
+    // For now, we simulate success and redirect immediately:
+
     // Logic for Worker (only needs email, password)
     if (role === 'worker') {
       const { email, password } = formData;
       console.log(`Signing in as Worker:`, { email, password });
+      
+      // 🚀 Redirect Worker to /worker dashboard
+      navigate('/worker');
+
     } 
     // Logic for Admin (needs email, password, secretKey)
     else if (role === 'admin') {
       console.log(`Signing in as Admin:`, formData);
+      
+      // 🚀 Redirect Admin to /admin dashboard
+      navigate('/admin');
     }
     
-    alert(`Attempting to sign in as ${role}. Check console for details.`);
+    // The previous alert is now removed for a smoother transition
   };
 
   const RoleToggle = () => (
